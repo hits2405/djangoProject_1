@@ -6,5 +6,5 @@ from eds.views import CatDV, CatLCV
 
 urlpatterns = [
     path('', CatLCV.as_view()),
-    path('<int:pk>', CatDV.as_view())
+    path('<int:pk>/', CatDV.as_view())
 ]
