@@ -9,6 +9,8 @@ packages = [{include = "djangoproject_1"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "^4.1.4"
+psycopg2 = "^2.9.5"
+pillow = "^9.4.0"
 
 
 [build-system]

@@ -20,5 +20,7 @@ def convert_file(csv_file, json_file, model):
     with open(json_file, 'w', encoding='utf-8') as json_f:
         json_f.write(json.dumps(result, ensure_ascii=False))
 
-convert_file('categories.csv', 'categories.json', 'eds.category')
-convert_file('ads.csv', 'ads.json', 'eds.ad')
+convert_file('category.csv', 'categories.json', 'eds.category')
+convert_file('ad.csv', 'ads.json', 'eds.ad')
+convert_file('location.csv', 'location.json', 'users.location')
+convert_file('user.csv', 'user.json', 'users.user')
