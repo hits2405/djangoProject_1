@@ -5,11 +5,12 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from rest_framework.generics import RetrieveAPIView
 
 from users.models import User, Location
+from users.serializers import UserDS
 
-
-class UserDV(DetailView):
+"""class UserDV(DetailView):
     model = User
 
     def get(self, request, *args, **kwargs):
@@ -21,7 +22,12 @@ class UserDV(DetailView):
                              "role": user.role,
                              "locations": [loc.name for loc in user.locations.all()],
                              "age": user.age
-                             })
+                             })"""
+
+class UserDV(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserDS
+
 
 
 class UserLV(ListView):

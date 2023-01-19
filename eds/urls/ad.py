@@ -1,6 +1,6 @@
 from django.urls import path
 
-from eds.views import AdLCV, AdDV
+from eds.views.ad import AdLCV, AdDV
 
 urlpatterns = [
     path('', AdLCV.as_view()),

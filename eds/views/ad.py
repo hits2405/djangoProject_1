@@ -33,7 +33,7 @@ class AdDV(DetailView):
                             )
 
 
-class AdLV(ListView):
+class AdLCV(ListView):
     model = Ad
     queryset = Ad.objects.order_by("-price")
 
