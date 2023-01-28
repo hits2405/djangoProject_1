@@ -31,7 +31,11 @@ class UserCS(serializers.ModelSerializer):
         return super().is_valid(raise_exception=raise_exception)
 
     def create(self, validated_data):
+        pas = validated_data.pop("password")
         new_user = User.objects.create(**validated_data)
+        new_user.set_password(pas)
+        new_user.save()
+
         for locate in self._locations:
             location, _ = Location.objects.get_or_create(name=locate)
             new_user.locations.add(location)
@@ -39,7 +43,8 @@ class UserCS(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ['password']
+        fields = "__all__"
+        #exclude = ['password']
 
 
 class UserUS(serializers.ModelSerializer):

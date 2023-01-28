@@ -1,16 +1,14 @@
-import json
-
-from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from eds.permissions import IsAdOwnerOrStaff
 from eds.serializers import *
-from eds.models import Ad, Category
+from eds.models import Ad
 
 
 def root(request):
@@ -25,6 +23,15 @@ class AdVS(ModelViewSet):
         "retrieve": AdDetailS
     }
     default_permission = [AllowAny()]
+    permissions = {
+        "retrieve": [IsAuthenticated()],
+        "partial_update": [IsAuthenticated(), IsAdOwnerOrStaff()],
+        "update": [IsAuthenticated(), IsAdOwnerOrStaff()],
+        "delete": [IsAuthenticated(), IsAdOwnerOrStaff()]
+    }
+
+    def get_permissions(self):
+        return self.permissions.get(self.action, self.default_permission)
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer)
@@ -50,7 +57,7 @@ class AdVS(ModelViewSet):
 
 class AdDV(RetrieveAPIView):
     queryset = Ad.objects.all()
-    serializer_class = AdLS
+    serializer_class = AdDetailS
 
 
 class AdCV(CreateAPIView):

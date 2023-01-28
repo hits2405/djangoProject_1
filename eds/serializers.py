@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
-from eds.models import Ad, Category
+from eds.models import Ad, Category, Selection
 from users.models import Location, User
 
 
@@ -74,3 +74,31 @@ class AdDeleteS(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = ["id"]
+
+class SelectionDetailS(serializers.ModelSerializer):
+    user = SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    items = AdLS(many=True)
+    class Meta:
+        model = Selection
+        fields = '__all__'
+
+
+class SelectionCreateS(serializers.ModelSerializer):
+    user = SlugRelatedField(slug_field='username', queryset=User.objects.all())
+
+    class Meta:
+        model = Selection
+        fields = '__all__'
+
+
+class SelectionLS(serializers.ModelSerializer):
+    class Meta:
+        model = Selection
+        fields = ['id', 'name']
+
+
+class SelectionS(serializers.ModelSerializer):
+
+    class Meta:
+        model = Selection
+        fields = '__all__'
