@@ -17,7 +17,7 @@ def root(request):
 
 class AdVS(ModelViewSet):
     queryset = Ad.objects.order_by('-price')
-    default_serializer = AdLS
+    default_serializer = AdS
     serializer_classes = {
         "List": AdLS,
         "retrieve": AdDetailS

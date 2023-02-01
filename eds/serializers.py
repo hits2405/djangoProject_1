@@ -1,11 +1,22 @@
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from eds.models import Ad, Category, Selection
+from eds.validators import not_null
 from users.models import Location, User
+from users.serializers import UserDS
+
+
+class AdS(serializers.ModelSerializer):
+    is_published = serializers.BooleanField(validators=[not_null])
+
+    class Meta:
+        model = Ad
+        fields = '__all__'
 
 
 class AdDetailS(serializers.ModelSerializer):
-    author = SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    author = UserDS()
+    #author = SlugRelatedField(slug_field='username', queryset=User.objects.all())
     category = SlugRelatedField(slug_field='name', queryset=Category.objects.all())
 
     class Meta:
@@ -15,7 +26,7 @@ class AdDetailS(serializers.ModelSerializer):
 
 class AdLS(serializers.ModelSerializer):
     author = SlugRelatedField(slug_field="id", queryset=User.objects.all())
-    category = SlugRelatedField(slug_field="id", queryset=Category.objects.all())
+    category = SlugRelatedField(slug_field="name", queryset=Category.objects.all())
     locations = serializers.SerializerMethodField()
 
     def get_locations(self, ad):
@@ -75,9 +86,11 @@ class AdDeleteS(serializers.ModelSerializer):
         model = Ad
         fields = ["id"]
 
+
 class SelectionDetailS(serializers.ModelSerializer):
     user = SlugRelatedField(slug_field='username', queryset=User.objects.all())
     items = AdLS(many=True)
+
     class Meta:
         model = Selection
         fields = '__all__'

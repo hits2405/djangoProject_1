@@ -7,8 +7,8 @@ from users.models import User
 class Ad(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False, validators=[MinLengthValidator(10)])
     author = models.ForeignKey("users.User", related_name="ad", on_delete=models.CASCADE, null=True)
-    price = models.IntegerField(null=True, validators=[MinValueValidator(0)])
-    description = models.TextField(null=False)
+    price = models.PositiveIntegerField()
+    description = models.TextField(null=False, blank=False)
     is_published = models.BooleanField(default=False)
     image = models.ImageField(upload_to='logos/', null=True)
     category = models.ForeignKey("Category", on_delete=models.CASCADE)
@@ -23,6 +23,7 @@ class Ad(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=10, unique=True, validators=[MinLengthValidator(5)], null=True)
 
     class Meta:
         verbose_name = "Категория"
